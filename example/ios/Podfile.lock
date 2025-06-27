@@ -1,40 +1,18 @@
 PODS:
-  - audioplayers_darwin (0.0.1):
-    - Flutter
   - camera_avfoundation (0.0.1):
     - Flutter
-  - connectivity_plus (0.0.1):
-    - Flutter
-    - ReachabilitySwift
   - device_info_plus (0.0.1):
     - Flutter
   - ekyc_flutter_sdk (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_pdfview (1.0.2):
-    - Flutter
-  - flutter_tts (0.0.1):
-    - Flutter
   - image_picker_ios (0.0.1):
     - Flutter
-  - libwebp (1.5.0):
-    - libwebp/demux (= 1.5.0)
-    - libwebp/mux (= 1.5.0)
-    - libwebp/sharpyuv (= 1.5.0)
-    - libwebp/webp (= 1.5.0)
-  - libwebp/demux (1.5.0):
-    - libwebp/webp
-  - libwebp/mux (1.5.0):
-    - libwebp/demux
-  - libwebp/sharpyuv (1.5.0)
-  - libwebp/webp (1.5.0):
-    - libwebp/sharpyuv
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
   - permission_handler_apple (9.1.1):
     - Flutter
-  - ReachabilitySwift (5.2.4)
   - TensorFlowLiteC (2.17.0):
     - TensorFlowLiteC/Core (= 2.17.0)
   - TensorFlowLiteC/Core (2.17.0)
@@ -49,56 +27,32 @@ PODS:
     - TensorFlowLiteSwift
   - uiux_ekyc_flutter_sdk (0.0.1):
     - Flutter
-  - video_player_avfoundation (0.0.1):
-    - Flutter
-  - video_thumbnail (0.0.1):
-    - Flutter
-    - libwebp
-  - volume_controller (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
-  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
-  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - ekyc_flutter_sdk (from `.symlinks/plugins/ekyc_flutter_sdk/ios`)
   - Flutter (from `Flutter`)
-  - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
-  - flutter_tts (from `.symlinks/plugins/flutter_tts/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - tflite_flutter (from `.symlinks/plugins/tflite_flutter/ios`)
   - uiux_ekyc_flutter_sdk (from `.symlinks/plugins/uiux_ekyc_flutter_sdk/ios`)
-  - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
-  - video_thumbnail (from `.symlinks/plugins/video_thumbnail/ios`)
-  - volume_controller (from `.symlinks/plugins/volume_controller/ios`)
 
 SPEC REPOS:
   trunk:
-    - libwebp
-    - ReachabilitySwift
     - TensorFlowLiteC
     - TensorFlowLiteSwift
 
 EXTERNAL SOURCES:
-  audioplayers_darwin:
-    :path: ".symlinks/plugins/audioplayers_darwin/ios"
   camera_avfoundation:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
-  connectivity_plus:
-    :path: ".symlinks/plugins/connectivity_plus/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   ekyc_flutter_sdk:
     :path: ".symlinks/plugins/ekyc_flutter_sdk/ios"
   Flutter:
     :path: Flutter
-  flutter_pdfview:
-    :path: ".symlinks/plugins/flutter_pdfview/ios"
-  flutter_tts:
-    :path: ".symlinks/plugins/flutter_tts/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   path_provider_foundation:
@@ -109,34 +63,19 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/tflite_flutter/ios"
   uiux_ekyc_flutter_sdk:
     :path: ".symlinks/plugins/uiux_ekyc_flutter_sdk/ios"
-  video_player_avfoundation:
-    :path: ".symlinks/plugins/video_player_avfoundation/ios"
-  video_thumbnail:
-    :path: ".symlinks/plugins/video_thumbnail/ios"
-  volume_controller:
-    :path: ".symlinks/plugins/volume_controller/ios"
 
 SPEC CHECKSUMS:
-  audioplayers_darwin: ccf9c770ee768abb07e26d90af093f7bab1c12ab
   camera_avfoundation: 6841f9d1468415f905b3f5ea52ab1466ca506730
-  connectivity_plus: 8443422d4c5a53dee0d50779ec5dbcda1071251e
   device_info_plus: 335f3ce08d2e174b9fdc3db3db0f4e3b1f66bd89
-  ekyc_flutter_sdk: 00f2cfff3288c123b145befe15f928720037ac10
+  ekyc_flutter_sdk: b57751ed724529bc45df6c9a41e0fdb354eee5d9
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_pdfview: 54e283d5851b0b247b3cc57877d35f1a05a204de
-  flutter_tts: b88dbc8655d3dc961bc4a796e4e16a4cc1795833
   image_picker_ios: a768de0d44b0925de635738f5030f9f2727eb996
-  libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   path_provider_foundation: 0f28622a447f952060798e710afcae6800d1dfa0
   permission_handler_apple: 3787117e48f80715ff04a3830ca039283d6a4f29
-  ReachabilitySwift: 32793e867593cfc1177f5d16491e3a197d2fccda
   TensorFlowLiteC: eac6d689a8d391d1b202dc59e3d9165ba64aaf73
   TensorFlowLiteSwift: 723fe42222815e72490c79feeff05305530de393
   tflite_flutter: 1a3d74dd49551bdcca6fa15cab08ce61eb9f8db6
   uiux_ekyc_flutter_sdk: b630bc8d93f4553bdb056cbd3c2e56166a97b26c
-  video_player_avfoundation: a8ea941d9519a60fa93a9908123c68e0917cbd1d
-  video_thumbnail: b637e0ad5f588ca9945f6e2c927f73a69a661140
-  volume_controller: ca1cde542ee70fad77d388f82e9616488110942b
 
 PODFILE CHECKSUM: e854d19aa8b8cae4d926a846d856f90d5ef4485c
 

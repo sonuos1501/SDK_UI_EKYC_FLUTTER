@@ -6,7 +6,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uiux_ekyc_flutter_sdk/components/custom_text_style.dart';
 import 'package:uiux_ekyc_flutter_sdk/models/sdk_config.dart';
 import 'package:uiux_ekyc_flutter_sdk/uiux_ekyc_flutter_sdk.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:uiux_ekyc_flutter_sdk_example/face_validation/app_config.dart';
 
 class FaceValidationScreen extends StatefulWidget {
@@ -19,22 +18,7 @@ class FaceValidationScreen extends StatefulWidget {
 }
 
 class _FaceValidationScreenState extends State<FaceValidationScreen> {
-  final Connectivity _connectivity = Connectivity();
   bool isSuccess = false;
-
-  Future<bool> _checkConnectivity() async {
-    try {
-      var result = await _connectivity.checkConnectivity();
-      if (result == ConnectivityResult.mobile ||
-          result == ConnectivityResult.wifi) {
-        return Future(() => true);
-      } else {
-        return Future(() => false);
-      }
-    } on PlatformException catch (e) {
-      return Future(() => false);
-    }
-  }
 
   Future<void> faceValidationCallback(
       bool faceValidationResult,

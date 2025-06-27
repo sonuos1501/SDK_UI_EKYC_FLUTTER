@@ -2,21 +2,17 @@
 
 import 'dart:async';
 import 'dart:io';
-
-import 'package:audioplayers/audioplayers.dart';
 import 'package:camera/camera.dart';
 import 'package:ekyc_flutter_sdk/ekyc_flutter_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:uiux_ekyc_flutter_sdk/components/custom_text_style.dart';
 import 'package:uiux_ekyc_flutter_sdk/constants.dart';
 import 'package:uiux_ekyc_flutter_sdk/src/callback/face_validation_callback.dart';
 import 'package:uiux_ekyc_flutter_sdk/src/helper/face_validation_status.dart';
 import 'package:uiux_ekyc_flutter_sdk/src/widgets/face_scanner.dart';
-import 'package:volume_controller/volume_controller.dart';
 
 import '../../uiux_ekyc_flutter_sdk.dart';
 import '../provider/face_validation_provider.dart';
@@ -51,12 +47,10 @@ class _FaceValidationViewState extends State<FaceValidationView>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   static String TAG = "Notify -------------->";
   double selectVolume = 0.5;
-  bool _isInitVolume = false;
   CameraController? cameraController;
   bool isCameraReady = false;
   bool isCameraResume = false;
   bool isCapture = false;
-  late FlutterTts flutterTts;
   TtsState ttsState = TtsState.continued;
   late CameraImage currentImage;
   late double screenWidth, screenHeight;
@@ -122,117 +116,11 @@ class _FaceValidationViewState extends State<FaceValidationView>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     faceValidationCallback = widget.faceValidationCallback;
-    _initAudioPlay();
     _resetStatus();
     _initializeCamera();
-    _listenerVolume();
   }
 
-  void _listenerVolume() {
-    VolumeController().listener((volume) {
-      if (selectVolume == 0 && volume > 0.5) return;
-      selectVolume = volume;
-      if (volume == 0) {
-        faceValidationNotifier.volumeStatus.add(true);
-        selectedAudioPlayer?.setVolume(0.5);
-        VolumeController().setVolume(0.5);
-      } else {
-        faceValidationNotifier.volumeStatus.add(false);
-        selectedAudioPlayer?.setVolume(volume);
-      }
-    });
-  }
-
-  AudioPlayer? selectedAudioPlayer;
   List<StreamSubscription> streams = [];
-
-  void _initAudioPlay() {
-    try {
-      selectedAudioPlayer = AudioPlayer();
-      selectedAudioPlayer?.setReleaseMode(ReleaseMode.stop);
-      selectedAudioPlayer?.audioCache = AudioCache(prefix: "");
-
-      // Add error handling for audio player
-      var subscription =
-          selectedAudioPlayer?.onPlayerStateChanged.listen((state) {
-        if (state == PlayerState.completed) {
-          // Handle completion if needed
-        }
-      });
-
-      if (subscription != null) {
-        streams.add(subscription);
-      }
-    } catch (e) {
-      print("Error initializing audio player: $e");
-    }
-  }
-
-  _speakByIndex(FaceValidationStatus status) async {
-    AssetSource? source;
-    switch (status) {
-      case FaceValidationStatus.WAITING:
-        source = AssetSource(
-            'packages/uiux_ekyc_flutter_sdk/assets/audios/khong-nhan-dien-duoc-khuon-mat.mp3');
-        break;
-      case FaceValidationStatus.CHECKING_STRAIGHT:
-        source = AssetSource(
-            'packages/uiux_ekyc_flutter_sdk/assets/audios/nhin-thang.mp3');
-        break;
-      case FaceValidationStatus.CHECKING_RIGHT:
-        source = AssetSource(
-            'packages/uiux_ekyc_flutter_sdk/assets/audios/quay-phai.mp3');
-        break;
-      case FaceValidationStatus.CHECKING_LEFT:
-        source = AssetSource(
-            'packages/uiux_ekyc_flutter_sdk/assets/audios/quay-trai.mp3');
-        break;
-      case FaceValidationStatus.CHECKING_CLOSE_ONE_EYE:
-        source = AssetSource(
-            'packages/uiux_ekyc_flutter_sdk/assets/audios/nhay-mat.mp3');
-        break;
-      case FaceValidationStatus.CHECKING_DOWN:
-        source = AssetSource(
-            'packages/uiux_ekyc_flutter_sdk/assets/audios/nhin-xuong.mp3');
-        break;
-      case FaceValidationStatus.CHECKING_UP:
-        source = AssetSource(
-            'packages/uiux_ekyc_flutter_sdk/assets/audios/nhin-len.mp3');
-        break;
-      case FaceValidationStatus.DONE:
-        source = AssetSource(
-            'packages/uiux_ekyc_flutter_sdk/assets/audios/hoan-thanh.mp3');
-        break;
-      default:
-        source = AssetSource(
-            'packages/uiux_ekyc_flutter_sdk/assets/audios/dua-mat-vao-trong-khung-hinh.mp3');
-        break;
-    }
-    if (!_isInitVolume) {
-      _isInitVolume = true;
-      var _getVolume = await VolumeController().getVolume();
-      selectVolume = _getVolume;
-      if (_getVolume == 0) {
-        faceValidationNotifier.volumeStatus.add(true);
-        selectedAudioPlayer?.setVolume(0.5);
-        VolumeController().setVolume(0.5);
-      } else {
-        faceValidationNotifier.volumeStatus.add(false);
-        selectedAudioPlayer?.setVolume(_getVolume);
-      }
-    }
-
-    if (selectedAudioPlayer != null &&
-        selectedAudioPlayer?.source.toString() !=
-            source.toString().toString()) {
-      try {
-        await selectedAudioPlayer?.stop();
-        await selectedAudioPlayer?.play(source);
-      } catch (e) {
-        print("Error playing audio: $e");
-      }
-    }
-  }
 
   @override
   void didUpdateWidget(FaceValidationView oldWidget) {
@@ -324,7 +212,6 @@ class _FaceValidationViewState extends State<FaceValidationView>
         isCameraReady = true;
         isCameraResume = true;
       });
-      _speakByIndex(FaceValidationStatus.DEFAULT);
       _resetStatus(change: false);
       _startStream();
     }
@@ -348,7 +235,6 @@ class _FaceValidationViewState extends State<FaceValidationView>
         stepValidation = stepValidationDefault..shuffle();
       });
     }
-    if (isSpeak) _speakByIndex(FaceValidationStatus.DEFAULT);
     _start = CHECK_STEP_1 + 1;
     for (var e in stepValidation) {
       e.isValid = false;
@@ -436,8 +322,6 @@ class _FaceValidationViewState extends State<FaceValidationView>
         _resetStatus(isSpeak: false);
       } else if (state == AppLifecycleState.detached) {
         _stopRecordVideo(context);
-        selectedAudioPlayer?.stop().catchError((onError) {});
-        selectedAudioPlayer?.release().catchError((onError) {});
         _disposeCamera();
       }
     }
@@ -479,7 +363,6 @@ class _FaceValidationViewState extends State<FaceValidationView>
                   .where((element) => element.isValid == false)
                   .isEmpty &&
               _start < CHECK_STEP_3 - 1) {
-            _speakByIndex(FaceValidationStatus.DONE);
             faceValidationNotifier.updateFaceValidateCurrentStatus(
                 FaceValidationStatus.DONE, INVALID_POSITION);
             _start = -1;
@@ -488,7 +371,6 @@ class _FaceValidationViewState extends State<FaceValidationView>
         } else {
           if (_start == CHECK_STEP_1) {
             print("$TAG TIME _start == CHECK_STEP_1");
-            _speakByIndex(stepValidation[0].faceValidationStatus);
             faceValidationNotifier.updateFaceValidateCurrentStatus(
                 stepValidation[0].faceValidationStatus, 0);
           }
@@ -505,7 +387,6 @@ class _FaceValidationViewState extends State<FaceValidationView>
               faceValidationNotifier.updateFaceMaskBorderColor(Colors.green);
 
               _start = CHECK_STEP_2;
-              _speakByIndex(stepValidation[1].faceValidationStatus);
               Future.delayed(const Duration(milliseconds: 100), () {
                 faceValidationNotifier.updateFaceValidateCurrentStatus(
                     stepValidation[1].faceValidationStatus, 1);
@@ -526,7 +407,6 @@ class _FaceValidationViewState extends State<FaceValidationView>
                 _start < CHECK_STEP_2 - 1) {
               faceValidationNotifier.updateFaceMaskBorderColor(Colors.green);
               _start = CHECK_STEP_3;
-              _speakByIndex(stepValidation[2].faceValidationStatus);
               Future.delayed(const Duration(milliseconds: 100), () {
                 faceValidationNotifier.updateFaceValidateCurrentStatus(
                     stepValidation[2].faceValidationStatus, 2);
@@ -696,10 +576,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
     stopTime();
 
     // Properly dispose audio player
-    try {
-      selectedAudioPlayer?.stop();
-      selectedAudioPlayer?.dispose();
-    } catch (e) {
+    try {} catch (e) {
       print("Error disposing audio player: $e");
     }
 
@@ -710,7 +587,6 @@ class _FaceValidationViewState extends State<FaceValidationView>
     streams.clear();
 
     _disposeCamera();
-    VolumeController().removeListener();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -1068,7 +944,6 @@ class _FaceValidationViewState extends State<FaceValidationView>
       e.isValid = false;
     }
     _start = CHECK_STEP_1 + 1;
-    _speakByIndex(FaceValidationStatus.WAITING);
     faceValidationNotifier.updateFaceValidateCurrentStatus(
         FaceValidationStatus.WAITING, INVALID_POSITION,
         messageError: "Không nhận diện được khuôn mặt");
