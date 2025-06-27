@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image/image.dart' as imglib;
 import 'package:uiux_ekyc_flutter_sdk/src/helper/face_validation_status.dart';
 
 import '../../constants.dart';
@@ -10,16 +9,23 @@ import '../../constants.dart';
 class FaceValidationNotifier {
   bool isRecording = false;
   bool canStart = false;
-  String? arrowPath = null;
-  StreamController<Uint8List?> imgStep1 = StreamController<Uint8List?>.broadcast();
-  StreamController<Uint8List?> imgStep2 = StreamController<Uint8List?>.broadcast();
-  StreamController<Uint8List?> imgStep3 = StreamController<Uint8List?>.broadcast();
-  StreamController<Uint8List?> imgStep4 = StreamController<Uint8List?>.broadcast();
-  StreamController<Uint8List?> imgStep5 = StreamController<Uint8List?>.broadcast();
+  String? arrowPath;
+  StreamController<Uint8List?> imgStep1 =
+      StreamController<Uint8List?>.broadcast();
+  StreamController<Uint8List?> imgStep2 =
+      StreamController<Uint8List?>.broadcast();
+  StreamController<Uint8List?> imgStep3 =
+      StreamController<Uint8List?>.broadcast();
+  StreamController<Uint8List?> imgStep4 =
+      StreamController<Uint8List?>.broadcast();
+  StreamController<Uint8List?> imgStep5 =
+      StreamController<Uint8List?>.broadcast();
   StreamController<String> stepResult = StreamController<String>.broadcast();
   String? strValidationResult;
-  StreamController<String> validationResult = StreamController<String>.broadcast();
-  StreamController<Color> faceMaskBorderColor = StreamController<Color>.broadcast();
+  StreamController<String> validationResult =
+      StreamController<String>.broadcast();
+  StreamController<Color> faceMaskBorderColor =
+      StreamController<Color>.broadcast();
   StreamController<bool> volumeStatus = StreamController<bool>.broadcast();
   late FaceValidationStatus faceValidateCurrentStatus;
   late int currentIndex;
@@ -51,7 +57,7 @@ class FaceValidationNotifier {
     // notifyListeners();
   }
 
-  void updateFaceValidateCurrentStatus(FaceValidationStatus status,int index,
+  void updateFaceValidateCurrentStatus(FaceValidationStatus status, int index,
       {String? messageError}) {
     faceValidateCurrentStatus = status;
     currentIndex = index;
@@ -159,7 +165,7 @@ class FaceValidationNotifier {
     faceMaskBorderColor.add(color);
   }
 
-  void changeImageStep(int  index, Uint8List? img) {
+  void changeImageStep(int index, Uint8List? img) {
     if (img == null) return;
     switch (index) {
       case 0:

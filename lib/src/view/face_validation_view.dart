@@ -26,9 +26,10 @@ class StepValidation {
   bool isValid;
   String pathDefault;
 
-  StepValidation({required this.faceValidationStatus,
-    required this.pathDefault,
-    required this.isValid});
+  StepValidation(
+      {required this.faceValidationStatus,
+      required this.pathDefault,
+      required this.isValid});
 }
 
 class FaceValidationView extends StatefulWidget {
@@ -80,7 +81,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
   static const double CHECK_DONE = 0.0;
   static const int INVALID_POSITION = -1;
   FaceValidationNotifier faceValidationNotifier =
-  FaceValidationNotifier(currentStatus: FaceValidationStatus.WAITING);
+      FaceValidationNotifier(currentStatus: FaceValidationStatus.WAITING);
   late FaceValidationCallback faceValidationCallback;
 
   int countDetectFailedFrame = 0;
@@ -143,8 +144,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
   List<StreamSubscription> streams = [];
 
   void _initAudioPlay() {
-    selectedAudioPlayer = AudioPlayer()
-      ..setReleaseMode(ReleaseMode.stop);
+    selectedAudioPlayer = AudioPlayer()..setReleaseMode(ReleaseMode.stop);
     selectedAudioPlayer?.audioCache = AudioCache(prefix: "");
   }
 
@@ -286,13 +286,13 @@ class _FaceValidationViewState extends State<FaceValidationView>
       }
     });
 
-    if (cameraController?.value?.hasError == true) {
-      print('$TAG Camera Error ${cameraController?.value?.errorDescription}');
+    if (cameraController?.value.hasError == true) {
+      print('$TAG Camera Error ${cameraController?.value.errorDescription}');
     }
     try {
       await cameraController?.initialize();
     } catch (e) {
-      print('$TAG Camera Error ${e}');
+      print('$TAG Camera Error $e');
     }
 
     if (mounted) {
@@ -308,10 +308,9 @@ class _FaceValidationViewState extends State<FaceValidationView>
 
   _startStream() {
     if (cameraController != null &&
-        cameraController?.value?.isInitialized == true) {
+        cameraController?.value.isInitialized == true) {
       cameraController?.startImageStream((CameraImage image) {
-        if (faceValidation != null && isCameraResume &&
-            !isStartingRecording) {
+        if (faceValidation != null && isCameraResume && !isStartingRecording) {
           print("LONGNV, stream on _startStream");
           faceValidation!.runDetect(image);
         }
@@ -327,7 +326,9 @@ class _FaceValidationViewState extends State<FaceValidationView>
     }
     if (isSpeak) _speakByIndex(FaceValidationStatus.DEFAULT);
     _start = CHECK_STEP_1 + 1;
-    stepValidation.forEach((e) => e.isValid = false);
+    for (var e in stepValidation) {
+      e.isValid = false;
+    }
     faceValidationNotifier.resetStatus(
         stepValidation[0].faceValidationStatus, INVALID_POSITION);
   }
@@ -379,9 +380,9 @@ class _FaceValidationViewState extends State<FaceValidationView>
       return _initializeCamera();
     }
     if ((isCameraReady &&
-        cameraController != null &&
-        !isCameraResume &&
-        cameraController?.hasListeners == true) ||
+            cameraController != null &&
+            !isCameraResume &&
+            cameraController?.hasListeners == true) ||
         resultBack == CameraStatus.RESUME_PREVIEW) {
       return _resumeCamera();
     } else {
@@ -392,9 +393,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (ModalRoute
-        .of(context)
-        ?.isCurrent == true) {
+    if (ModalRoute.of(context)?.isCurrent == true) {
       if (state == AppLifecycleState.resumed) {
         _resumeCamera();
       } else if (state == AppLifecycleState.inactive) {
@@ -435,7 +434,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
     _logTime("$TAG startTimer");
     _timer = Timer.periodic(
       oneSec,
-          (Timer timer) {
+      (Timer timer) {
         _logTime("$TAG startTimer $_start");
         if (_start < CHECK_STEP_3 && _start >= CHECK_DONE) {
           print("$TAG TIME CHECK_DONE");
@@ -453,8 +452,8 @@ class _FaceValidationViewState extends State<FaceValidationView>
             _start = _start - 0.5;
           }
           if (stepValidation
-              .where((element) => element.isValid == false)
-              .isEmpty &&
+                  .where((element) => element.isValid == false)
+                  .isEmpty &&
               _start < CHECK_STEP_3 - 1) {
             _speakByIndex(FaceValidationStatus.DONE);
             faceValidationNotifier.updateFaceValidateCurrentStatus(
@@ -568,7 +567,8 @@ class _FaceValidationViewState extends State<FaceValidationView>
     );
   }
 
-  void faceDetectCallBack(List<Detection> detection,
+  void faceDetectCallBack(
+      List<Detection> detection,
       imglib.Image? img,
       bool detectResult,
       String resultName,
@@ -583,39 +583,36 @@ class _FaceValidationViewState extends State<FaceValidationView>
       if (faceValidationNotifier.currentIndex == INVALID_POSITION) return;
       var currentIndex = faceValidationNotifier.currentIndex;
       print("$TAG faceDetectCallBack "
-          "faceValidationStatus: ${stepValidation[currentIndex]
-          .faceValidationStatus}"
+          "faceValidationStatus: ${stepValidation[currentIndex].faceValidationStatus}"
           "isValid: ${stepValidation[currentIndex].isValid} "
-          "leftAndRigtPercent: ${leftAndRigtPercent} "
-          "trenDuoi: ${trenDuoi} "
+          "leftAndRigtPercent: $leftAndRigtPercent "
+          "trenDuoi: $trenDuoi "
           "currentIndex: $currentIndex");
 
       switch (stepValidation[currentIndex].faceValidationStatus) {
         case FaceValidationStatus.CHECKING_STRAIGHT:
           if (!stepValidation[currentIndex].isValid &&
-              detectResult &&
-              -50 < leftAndRigtPercent &&
-              leftAndRigtPercent < 50
-          // && trenDuoi == 150
-          ) {
+                  detectResult &&
+                  -50 < leftAndRigtPercent &&
+                  leftAndRigtPercent < 50
+              // && trenDuoi == 150
+              ) {
             faceValidationNotifier.changeImageStep(currentIndex, imageByte);
             stepValidation[currentIndex].isValid = true;
           }
           break;
         case FaceValidationStatus.CHECKING_LEFT:
-          if (!stepValidation[currentIndex].isValid &&
-              leftAndRigtPercent < -60
-          // && trenDuoi == 150
-          ) {
+          if (!stepValidation[currentIndex].isValid && leftAndRigtPercent < -60
+              // && trenDuoi == 150
+              ) {
             faceValidationNotifier.changeImageStep(currentIndex, imageByte);
             stepValidation[currentIndex].isValid = true;
           }
           break;
         case FaceValidationStatus.CHECKING_RIGHT:
-          if (!stepValidation[currentIndex].isValid &&
-              leftAndRigtPercent > 60
-          // && trenDuoi == 150
-          ) {
+          if (!stepValidation[currentIndex].isValid && leftAndRigtPercent > 60
+              // && trenDuoi == 150
+              ) {
             stepValidation[currentIndex].isValid = true;
             faceValidationNotifier.changeImageStep(currentIndex, imageByte);
           }
@@ -684,25 +681,18 @@ class _FaceValidationViewState extends State<FaceValidationView>
 
   @override
   Widget build(BuildContext context) {
-    screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
     getScannerSize();
     if (!isInit && chooseCamera != null && isCameraReady) {
       MaskView maskView = MaskView(
           _cardAreaLeft, _cardAreaTop, _cardAreaWidth, _cardAreaHeight);
-      sdkConfig = SdkConfig(MediaQuery
-          .of(context)
-          .size, maskView,
+      sdkConfig = SdkConfig(MediaQuery.of(context).size, maskView,
           ValidationStep.CARDBACK, chooseCamera!);
-      faceValidation = FaceValidation(sdkConfig,
-          faceDetectionCallBack: faceDetectCallBack,
-          // faceLivenessCallBack: faceLivenessCallBack
+      faceValidation = FaceValidation(
+        sdkConfig,
+        faceDetectionCallBack: faceDetectCallBack,
+        // faceLivenessCallBack: faceLivenessCallBack
       );
       // faceValidation?.resultFaceLivenessStream?.listen((event) {
       //   faceLivenessCallBack(
@@ -732,11 +722,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
     _cardAreaLeft = _OFFSET_X_FACTOR * screenWidth.round();
     _cardAreaWidth = screenWidth.round() - _cardAreaLeft * 2;
     _cardAreaHeight = _cardAreaWidth * _CARD_ASPECT_RATIO;
-    _cardAreaTop =
-        MediaQuery
-            .of(context)
-            .padding
-            .top + 74 + 15;
+    _cardAreaTop = MediaQuery.of(context).padding.top + 74 + 15;
     // (screenHeight.round() - screenHeight.round() * 0.15 - _cardAreaHeight) /
     //     2;
     getScannerRealSize();
@@ -749,16 +735,13 @@ class _FaceValidationViewState extends State<FaceValidationView>
     _cardAreaLeftR = _OFFSET_X_FACTOR * screenWidth;
     _cardAreaWidthR = screenWidth - _cardAreaLeftR * 2;
     _cardAreaHeightR = _cardAreaWidthR;
-    _cardAreaTopR = MediaQuery
-        .of(context)
-        .padding
-        .top + 74 + 15;
+    _cardAreaTopR = MediaQuery.of(context).padding.top + 74 + 15;
     // (screenHeight - screenHeight * 0.15 - _cardAreaHeightR) / 2;
   }
 
   _startRecordVideo(BuildContext context, {bool isStartTime = true}) {
     if (cameraController == null ||
-        cameraController?.value?.isRecordingVideo == true ||
+        cameraController?.value.isRecordingVideo == true ||
         faceValidationNotifier.isRecording) {
       return;
     }
@@ -768,11 +751,11 @@ class _FaceValidationViewState extends State<FaceValidationView>
         try {
           cameraController?.startVideoRecording(
               onAvailable: (CameraImage image) {
-                print("LONGNV, stream on startVideoRecording");
-                if (faceValidation != null && isCameraResume) {
-                  faceValidation?.runDetect(image);
-                }
-              }).then((value) {
+            print("LONGNV, stream on startVideoRecording");
+            if (faceValidation != null && isCameraResume) {
+              faceValidation?.runDetect(image);
+            }
+          }).then((value) {
             isStartingRecording = false;
             faceValidationNotifier.changeRecordStatus(true);
             if (_timer?.isActive != true) startTimer(context);
@@ -788,8 +771,8 @@ class _FaceValidationViewState extends State<FaceValidationView>
 
   _stopRecordVideo(BuildContext context,
       {bool isRecordDone = false,
-        String errorCode = "",
-        String errMessage = "Xin hãy thực hiện theo hướng dẫn"}) {
+      String errorCode = "",
+      String errMessage = "Xin hãy thực hiện theo hướng dẫn"}) {
     if (faceValidationNotifier.isRecording == true) {
       final CameraController? controller = cameraController;
 
@@ -804,8 +787,10 @@ class _FaceValidationViewState extends State<FaceValidationView>
           controller.stopVideoRecording().then((value) async {
             if (cameraController != null) {
               print("$TAG _pauseCamera");
-              await cameraController?.pausePreview().onError((error, stackTrace) {
-              print("$TAG _pauseCamera error $error");
+              await cameraController
+                  ?.pausePreview()
+                  .onError((error, stackTrace) {
+                print("$TAG _pauseCamera error $error");
               });
               setState(() {
                 isCameraResume = false;
@@ -853,9 +838,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
   getBody() {
     // if (isCameraReady) {
     var scale = 1.0;
-    final size = MediaQuery
-        .of(context)
-        .size;
+    final size = MediaQuery.of(context).size;
     // try {
     //   if (isCameraReady && cameraController != null) {
     //     var camera = cameraController!.value;
@@ -868,12 +851,12 @@ class _FaceValidationViewState extends State<FaceValidationView>
     //   print(ex);
     // }
     var heightCard = (size.height -
-        (_cardAreaTopR + _cardAreaHeightR + 24 + 15 + 24 + 20 + 16 + 5)) /
+            (_cardAreaTopR + _cardAreaHeightR + 24 + 15 + 24 + 20 + 16 + 5)) /
         2;
     return SafeArea(
       bottom: false,
       top: false,
-      child: Container(
+      child: SizedBox(
         height: size.height,
         width: size.width,
         child: Stack(
@@ -883,8 +866,8 @@ class _FaceValidationViewState extends State<FaceValidationView>
               scale: scale,
               child: isCameraReady
                   ? Center(
-                child: CameraPreview(cameraController!),
-              )
+                      child: CameraPreview(cameraController!),
+                    )
                   : const Center(child: CircularProgressIndicator()),
             ),
             StreamBuilder(
@@ -894,10 +877,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
                   return _getShapeOverlay(true, color);
                 }),
             Positioned(
-              top: MediaQuery
-                  .of(context)
-                  .padding
-                  .top + 16,
+              top: MediaQuery.of(context).padding.top + 16,
               left: 45,
               right: 20,
               child: Row(
@@ -906,7 +886,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
                   Expanded(
                       child: StreamBuilder(
                           stream:
-                          faceValidationNotifier.validationResult.stream,
+                              faceValidationNotifier.validationResult.stream,
                           builder: (context, snapsot) {
                             String? validationResult = snapsot.data as String?;
                             return Text(
@@ -924,11 +904,12 @@ class _FaceValidationViewState extends State<FaceValidationView>
                         return SizedBox(
                           width: 20,
                           height: 24,
-                          child: _isMute == true ? SvgPicture.asset(
-                              "assets/images/ic_volume_mute.svg",
-                              package: 'ekyc_sdk_plugin') : SvgPicture.asset(
-                              "assets/images/ic_volume.svg",
-                              package: 'ekyc_sdk_plugin'),
+                          child: _isMute == true
+                              ? SvgPicture.asset(
+                                  "assets/images/ic_volume_mute.svg",
+                                  package: 'ekyc_sdk_plugin')
+                              : SvgPicture.asset("assets/images/ic_volume.svg",
+                                  package: 'ekyc_sdk_plugin'),
                         );
                       })
                 ],
@@ -1015,7 +996,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
         decoration: BoxDecoration(
             border: Border.all(color: kNeutral200Color),
             borderRadius: BorderRadius.circular(8)),
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Center(
           child: SizedBox(
             child: StreamBuilder(
@@ -1024,10 +1005,10 @@ class _FaceValidationViewState extends State<FaceValidationView>
                   Uint8List? img = snapsot.data as Uint8List?;
                   return img == null
                       ? Image.asset(
-                    icon,
-                    package: 'ekyc_sdk_plugin',
-                  )
-                      : Image.memory(img!);
+                          icon,
+                          package: 'ekyc_sdk_plugin',
+                        )
+                      : Image.memory(img);
                 }),
             height: 59,
             width: 46,
@@ -1036,7 +1017,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
   }
 
   _logTime(String message) {
-    DateTime dateToday = new DateTime.now();
+    DateTime dateToday = DateTime.now();
     String date = dateToday.toString();
     debugPrint("$message ---->$date");
   }
@@ -1045,7 +1026,9 @@ class _FaceValidationViewState extends State<FaceValidationView>
 
   void _stopVideoAndResetTime(String code, String mess) {
     isPrepareRestart = false;
-    stepValidation.forEach((e) => e.isValid = false);
+    for (var e in stepValidation) {
+      e.isValid = false;
+    }
     _start = CHECK_STEP_1 + 1;
     _speakByIndex(FaceValidationStatus.WAITING);
     faceValidationNotifier.updateFaceValidateCurrentStatus(
@@ -1057,7 +1040,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
       final CameraController? controller = cameraController;
 
       if (controller == null || !controller.value.isRecordingVideo) {
-        return null;
+        return;
       }
 
       stopTime();
@@ -1067,7 +1050,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
           print("$TAG  _stopVideoAndResetTime success");
           faceValidationNotifier.changeCanStartStatus(false);
           faceValidationNotifier.changeRecordStatus(false);
-          Future.delayed(Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 2), () {
             _resetStatus();
             // _startStream();
             isPrepareRestart = true;
@@ -1076,7 +1059,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
           print("$TAG  _stopVideoAndResetTime success ERROR");
           faceValidationNotifier.changeCanStartStatus(false);
           faceValidationNotifier.changeRecordStatus(false);
-          Future.delayed(Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 2), () {
             _resetStatus();
             // _startStream();
             isPrepareRestart = true;
@@ -1085,7 +1068,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
       }, onError: (ex) {
         faceValidationNotifier.changeCanStartStatus(false);
         faceValidationNotifier.changeRecordStatus(false);
-        Future.delayed(Duration(seconds: 2), () {
+        Future.delayed(const Duration(seconds: 2), () {
           _resetStatus();
           // _startStream();
           isPrepareRestart = true;
@@ -1105,7 +1088,7 @@ class ObjectImage {
 class OutputFaceResult {
   bool isRecording = false;
   bool canStart = false;
-  String? arrowPath = null;
+  String? arrowPath;
   String? iconPath = "assets/images/face_validate_straight_icon.png";
   String step1Path = "assets/images/ic_face_center.png";
   String step2Path = "assets/images/ic_face_left.png";
@@ -1125,15 +1108,16 @@ class OutputFaceResult {
 }
 
 class AnimatedProgressBar extends AnimatedWidget {
-  AnimatedProgressBar({Key? key, required Animation<double> animation})
+  const AnimatedProgressBar({Key? key, required Animation<double> animation})
       : super(key: key, listenable: animation);
 
+  @override
   Widget build(BuildContext context) {
     final Animation<double> animation = listenable as Animation<double>;
     return Container(
       height: 6.0,
       width: animation.value,
-      decoration: BoxDecoration(color: Colors.green),
+      decoration: const BoxDecoration(color: Colors.green),
     );
   }
 }
