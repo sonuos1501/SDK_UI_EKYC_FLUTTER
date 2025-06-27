@@ -12,8 +12,6 @@ dependencies:
     sdk: flutter
 
   image: ^3.0.2
-  # ekyc_logic:
-  #   path: /Users/hieunt/FlutterDev/ekyc_logic
 
   ekyc_flutter_sdk:
     path: ../ekyc_flutter_sdk
