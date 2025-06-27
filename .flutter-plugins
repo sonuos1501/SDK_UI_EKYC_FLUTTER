@@ -3,7 +3,6 @@ camera=/Users/son/.pub-cache/git/flutter-camera-package-6fa593779cada7bc52a101f4
 camera_android=/Users/son/.pub-cache/git/flutter-camera-package-6fa593779cada7bc52a101f44037e3ee53ace935/packages/camera/camera_android/
 camera_avfoundation=/Users/son/.pub-cache/git/flutter-camera-package-c320bc065fe2bc30767e91db56d6004ab142b7a2/packages/camera/camera_avfoundation/
 camera_web=/Users/son/.pub-cache/git/flutter-camera-package-c320bc065fe2bc30767e91db56d6004ab142b7a2/packages/camera/camera_web/
-device_info_plus=/Users/son/.pub-cache/hosted/pub.dev/device_info_plus-9.1.2/
 ekyc_flutter_sdk=/Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/
 file_selector_linux=/Users/son/.pub-cache/hosted/pub.dev/file_selector_linux-0.9.3+2/
 file_selector_macos=/Users/son/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.4+2/
