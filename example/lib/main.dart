@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:uiux_ekyc_flutter_sdk/uiux_ekyc_flutter_sdk.dart';
-
 void main() {
   runApp(const MyApp());
 }
