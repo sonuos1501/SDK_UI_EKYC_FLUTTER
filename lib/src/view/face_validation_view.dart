@@ -147,8 +147,25 @@ class _FaceValidationViewState extends State<FaceValidationView>
   List<StreamSubscription> streams = [];
 
   void _initAudioPlay() {
-    selectedAudioPlayer = AudioPlayer()..setReleaseMode(ReleaseMode.stop);
-    selectedAudioPlayer?.audioCache = AudioCache(prefix: "");
+    try {
+      selectedAudioPlayer = AudioPlayer();
+      selectedAudioPlayer?.setReleaseMode(ReleaseMode.stop);
+      selectedAudioPlayer?.audioCache = AudioCache(prefix: "");
+
+      // Add error handling for audio player
+      var subscription =
+          selectedAudioPlayer?.onPlayerStateChanged.listen((state) {
+        if (state == PlayerState.completed) {
+          // Handle completion if needed
+        }
+      });
+
+      if (subscription != null) {
+        streams.add(subscription);
+      }
+    } catch (e) {
+      print("Error initializing audio player: $e");
+    }
   }
 
   _speakByIndex(FaceValidationStatus status) async {
@@ -208,8 +225,12 @@ class _FaceValidationViewState extends State<FaceValidationView>
     if (selectedAudioPlayer != null &&
         selectedAudioPlayer?.source.toString() !=
             source.toString().toString()) {
-      selectedAudioPlayer?.stop().catchError((onError) {});
-      selectedAudioPlayer?.play(source).catchError((onError) {});
+      try {
+        await selectedAudioPlayer?.stop();
+        await selectedAudioPlayer?.play(source);
+      } catch (e) {
+        print("Error playing audio: $e");
+      }
     }
   }
 
@@ -673,7 +694,21 @@ class _FaceValidationViewState extends State<FaceValidationView>
     faceValidation?.closeAllStream();
     _stopRecordVideo(context);
     stopTime();
-    selectedAudioPlayer?.dispose();
+
+    // Properly dispose audio player
+    try {
+      selectedAudioPlayer?.stop();
+      selectedAudioPlayer?.dispose();
+    } catch (e) {
+      print("Error disposing audio player: $e");
+    }
+
+    // Dispose stream subscriptions
+    for (var subscription in streams) {
+      subscription.cancel();
+    }
+    streams.clear();
+
     _disposeCamera();
     VolumeController().removeListener();
     WidgetsBinding.instance.removeObserver(this);
@@ -910,9 +945,9 @@ class _FaceValidationViewState extends State<FaceValidationView>
                           child: _isMute == true
                               ? SvgPicture.asset(
                                   "assets/images/ic_volume_mute.svg",
-                                  package: 'ekyc_sdk_plugin')
+                                  package: 'uiux_ekyc_flutter_sdk')
                               : SvgPicture.asset("assets/images/ic_volume.svg",
-                                  package: 'ekyc_sdk_plugin'),
+                                  package: 'uiux_ekyc_flutter_sdk'),
                         );
                       })
                 ],
@@ -1009,7 +1044,7 @@ class _FaceValidationViewState extends State<FaceValidationView>
                   return img == null
                       ? Image.asset(
                           icon,
-                          package: 'ekyc_sdk_plugin',
+                          package: 'uiux_ekyc_flutter_sdk',
                         )
                       : Image.memory(img);
                 }),

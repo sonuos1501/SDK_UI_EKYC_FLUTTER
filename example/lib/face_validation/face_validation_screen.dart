@@ -105,7 +105,7 @@ class _FaceValidationScreenState extends State<FaceValidationScreen> {
                       fit: BoxFit.fill,
                       image: AssetImage(
                           'assets/images/ic_background_permission.png',
-                          package: 'ekyc_sdk_plugin'),
+                          package: 'uiux_ekyc_flutter_sdk'),
                     ),
                   ),
                   child: Stack(
@@ -132,7 +132,7 @@ class _FaceValidationScreenState extends State<FaceValidationScreen> {
           height: 148,
           child: Image.asset(
             'assets/images/ic_upload_face_success.png',
-            package: 'ekyc_sdk_plugin',
+            package: 'uiux_ekyc_flutter_sdk',
           ),
         ),
         const SizedBox(height: 16),
