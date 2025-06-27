@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:async';
 import 'dart:io';
 
@@ -26,10 +28,11 @@ class StepValidation {
   bool isValid;
   String pathDefault;
 
-  StepValidation(
-      {required this.faceValidationStatus,
-      required this.pathDefault,
-      required this.isValid});
+  StepValidation({
+    required this.faceValidationStatus,
+    required this.pathDefault,
+    required this.isValid,
+  });
 }
 
 class FaceValidationView extends StatefulWidget {

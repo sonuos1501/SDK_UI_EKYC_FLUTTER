@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:uiux_ekyc_flutter_sdk/models/sdk_config.dart';
+import 'package:uiux_ekyc_flutter_sdk_example/face_validation/face_validation_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -12,27 +16,41 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  late SdkConfig sdkConfig;
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    initSdkConfig();
+    setState(() {});
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {}
+  void initSdkConfig() {
+    sdkConfig = SdkConfig(
+      apiUrl: "https://savis-ekyc.tunnel.techainer.com/api/v1/ekyc",
+      source: "techainer",
+      env: "dev",
+      token: "74d479f61e1fef2961a6253f32922fcf1b6ff785",
+      timeOut: 60,
+      email: "",
+      phone: "",
+      backRoute: "/",
+      urlVideoDetectFaceGuide:
+          'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+      urlVideoAuthenGuide:
+          'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
+        body: FaceValidationScreen(sdkConfig: sdkConfig),
       ),
     );
   }
