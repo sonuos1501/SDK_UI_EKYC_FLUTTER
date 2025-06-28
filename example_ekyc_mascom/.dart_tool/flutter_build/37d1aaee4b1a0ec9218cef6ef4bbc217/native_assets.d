@@ -1,0 +1,1 @@
+ /Users/son/Documents/NKG/flutter_ekyc/uiux_ekyc_flutter_sdk/example_ekyc_mascom/.dart_tool/flutter_build/37d1aaee4b1a0ec9218cef6ef4bbc217/native_assets.yaml: 
