@@ -2,10 +2,8 @@
 manifest
 ADDED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml:1:1-5:12
 INJECTED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml:1:1-5:12
-INJECTED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml:1:1-5:12
 	package
 		ADDED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml:2:3-41
-		INJECTED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml
 		INJECTED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml
 	xmlns:android
 		ADDED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml:1:11-69
@@ -21,13 +19,7 @@ uses-sdk
 INJECTED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml
 INJECTED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml
-INJECTED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml
-INJECTED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml
 	android:targetSdkVersion
 		INJECTED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml
-		ADDED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml
-		INJECTED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml
-		ADDED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml
 		INJECTED from /Users/son/Documents/NKG/flutter_ekyc/ekyc_flutter_sdk/android/src/main/AndroidManifest.xml
